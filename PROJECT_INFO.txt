@@ -1,0 +1,93 @@
+================================================================
+              AI Research System - Multi Agent
+================================================================
+
+WHAT IS THIS PROJECT?
+-----------------------
+ResearchMind is an AI-powered research assistant that takes any
+topic you give it and automatically produces a full, structured
+research report — without you having to search, read, or write
+anything yourself.
+
+You type a topic (e.g. "LLM agents 2025"), click a button, and
+get back a complete report with an intro, key findings, conclusion,
+sources, and a critic's score/feedback.
+
+
+HOW IT WORKS (4-Step Pipeline)
+--------------------------------
+Step 1 — Search Agent
+  Searches the web for recent, reliable information on your topic.
+  Uses the Tavily Search API to fetch the top 5 results (title,
+  URL, and snippet for each).
+
+Step 2 — Reader Agent
+  Picks the most relevant URL from the search results and scrapes
+  the full page content for deeper detail.
+  First tries a direct HTTP scrape with browser-like headers.
+  If blocked (e.g. Cloudflare), falls back to Tavily Extract API.
+
+Step 3 — Writer Chain
+  Combines the search results + scraped content and writes a clean,
+  structured research report:
+    - Introduction
+    - Key Findings (3+ points)
+    - Conclusion
+    - Sources
+
+Step 4 — Critic Chain
+  Reviews the report and gives:
+    - A score out of 10
+    - Strengths
+    - Areas to improve
+    - A one-line verdict
+
+
+WHAT WE USE
+------------
+- Groq API          → Fast LLM inference (llama-3.1-8b-instant model)
+- LangChain         → Building LLM chains (Writer & Critic)
+- LangGraph         → Building reactive agents (Search & Reader)
+- Tavily API        → Web search + fallback URL extraction
+- BeautifulSoup     → Direct HTML scraping and parsing
+- Streamlit         → Web UI (runs in your browser)
+- python-dotenv     → Loads API keys from .env file
+
+
+TECH STACK SUMMARY
+-------------------
+Language   : Python 3.9+
+UI         : Streamlit
+LLM        : Groq — llama-3.1-8b-instant
+Agents     : LangGraph (create_react_agent)
+Chains     : LangChain (ChatPromptTemplate + StrOutputParser)
+Search     : Tavily Python SDK
+Scraping   : requests + BeautifulSoup + Tavily Extract (fallback)
+
+
+HOW TO RUN
+-----------
+1. Add your API keys to the .env file:
+      GROQ_API_KEY=gsk_...
+      TAVILY_API_KEY=tvly-...
+
+2. Activate the virtual environment:
+      source .venv/bin/activate
+
+3. Start the app:
+      streamlit run app.py
+
+4. Open your browser at:
+      http://localhost:8501
+
+
+PROJECT FILES
+--------------
+app.py           → Streamlit UI + pipeline orchestration
+agents.py        → Search Agent & Reader Agent (LangGraph)
+tools.py         → web_search and scrape_url tool definitions
+pipeline.py      → (reserved for standalone pipeline runs)
+requirements.txt → All Python dependencies
+.env             → API keys (never commit this to GitHub)
+
+================================================================
